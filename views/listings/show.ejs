@@ -1,85 +1,40 @@
 
-<% layout('layouts/boilerplate') %>
+<<%- layout('layouts/boilerplate') %>
 
-<style>
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #f8f9fa;
-  }
 
-  .listing-container {
-    max-width: 700px;
-    margin: 60px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  }
 
-  .listing-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1f2937;
-  }
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <!-- Image -->
+        <% if(listing.image) { %>
+          <img src="<%= listing.image.url || listing.image %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem; object-fit: cover;">
+        <% } else { %>
+          <img src="/images/default-listing.jpg" class="card-img-top" alt="Default listing image" style="height: 20rem; object-fit: cover;">
+        <% } %>
 
-  .listing-desc {
-    font-size: 1rem;
-    color: #4b5563;
-    margin-top: 10px;
-  }
+        <!-- Card Body -->
+        <div class="card-body">
+          <h3 class="listing-title mb-3"><%= listing.title %></h3>
+          <p class="listing-desc mb-4"><%= listing.description %></p>
 
-  .listing-meta {
-    font-size: 0.95rem;
-    color: #6b7280;
-    margin-top: 15px;
-  }
+          <ul class="list-unstyled listing-meta">
+            <li><strong>Price:</strong> ₹ <%= listing.price.toLocaleString("en-IN") %></li>
+            <li><strong>Location:</strong> <%= listing.location %></li>
+            <li><strong>Country:</strong> <%= listing.country %></li>
+          </ul>
+        </div>
 
-  .btn-custom {
-    background-color: #1f2937;
-    color: white;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-block;
-    margin-right: 10px;
-    transition: background-color 0.3s ease;
-  }
+        <!-- Card Footer -->
+        <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
+          <a href="/listings/<%= listing._id %>/edit" class="btn-custom">Edit Listing</a>
 
-  .btn-custom:hover {
-    background-color: #111827;
-  }
-
-  .btn-delete {
-    background-color: #ef4444;
-    color: white;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 8px;
-    border: none;
-    transition: background-color 0.3s ease;
-  }
-
-  .btn-delete:hover {
-    background-color: #dc2626;
-  }
-</style>
-
-<div class="listing-container">
-  <h3 class="listing-title"><%= listing.title %></h3>
-  <p class="listing-desc"><%= listing.description %></p>
-
-  <ul class="list-unstyled listing-meta">
-    <li><strong>Price:</strong> ₹ <%= listing.price.toLocaleString("en-IN") %></li>
-    <li><strong>Location:</strong> <%= listing.location %></li>
-    <li><strong>Country:</strong> <%= listing.country %></li>
-  </ul>
-
-  <div class="mt-4">
-    <a href="/listings/<%= listing._id %>/edit" class="btn-custom">Edit Listing</a>
-
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
-      <button type="submit" class="btn-delete">Delete Listing</button>
-    </form>
+          <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+            <button type="submit" class="btn-delete">Delete Listing</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
