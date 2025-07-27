@@ -1,0 +1,35 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <% if (statusCode) { %>
+                            Error <%= statusCode %>
+                        <% } else { %>
+                            Something Went Wrong!
+                        <% } %>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><%= message %></p>
+                    
+                    <% if (stack && statusCode === 500) { %>
+                        <div class="alert alert-info">
+                            <h6>Debug Information:</h6>
+                            <pre><%= stack %></pre>
+                        </div>
+                    <% } %>
+                    
+                    <div class="mt-3">
+                        <a href="/" class="btn btn-primary">Go Home</a>
+                        <button onclick="history.back()" class="btn btn-secondary">Go Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
