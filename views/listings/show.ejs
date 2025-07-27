@@ -1,7 +1,5 @@
 
-<<%- layout('layouts/boilerplate') %>
-
-
+<%- layout('layouts/boilerplate') %>
 
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -28,12 +26,64 @@
 
         <!-- Card Footer -->
         <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-          <a href="/listings/<%= listing._id %>/edit" class="btn-custom">Edit Listing</a>
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">Edit Listing</a>
 
           <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
-            <button type="submit" class="btn-delete">Delete Listing</button>
+            <button type="submit" class="btn btn-danger">Delete Listing</button>
           </form>
         </div>
+      </div>
+    </div>
+    
+    <!-- Review Section -->
+    <div class="col-md-8 mt-5">
+      <h4>Leave a Review</h4>
+      <form action="/listings/<%= listing._id %>/reviews" method="POST">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating (1-5)</label>
+          <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]" required>
+          <div class="form-text">Slide to select rating</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="comment" class="form-label">Comment</label>
+          <textarea class="form-control" name="review[comment]" id="comment" rows="4" placeholder="Share your experience..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit Review</button>
+      </form>
+      
+      <!-- All Reviews Section -->
+      <div class="mt-5">
+        <h4>All Reviews</h4>
+        <% if (listing.reviews && listing.reviews.length > 0) { %>
+          <div class="reviews-container">
+            <% listing.reviews.forEach(review => { %>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="card-title">
+                        <% for(let i = 0; i < review.rating; i++) { %>
+                          <span class="text-warning">★</span>
+                        <% } %>
+                        <% for(let i = review.rating; i < 5; i++) { %>
+                          <span class="text-muted">★</span>
+                        <% } %>
+                      </h6>
+                      <p class="card-text"><%= review.comment %></p>
+                    </div>
+                    <small class="text-muted">
+                      <%= review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'Recent' %>
+                    </small>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <p class="text-muted">No reviews yet. Be the first to review!</p>
+        <% } %>
       </div>
     </div>
   </div>
