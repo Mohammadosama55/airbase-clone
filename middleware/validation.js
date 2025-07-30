@@ -5,6 +5,7 @@ const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
   if (error) {
     const errMsg = error.details.map(el => el.message).join(',');
+     console.log(errMsg);
     return res.status(400).send(`Validation Error: ${errMsg}`);
   }
   next();

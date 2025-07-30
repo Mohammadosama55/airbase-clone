@@ -2,15 +2,17 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const passport = require("passport");
+const { isLoggedIn, saveReturnTo } = require('../middleware/isLoggedin');
 
-// GET signup form (correct)
+// GET signup form
 router.get('/signup', (req, res) => {
     res.render('users/signup'); 
 });
 
-// POST signup form (correct)
+// POST signup form
 router.post('/signup', async (req, res, next) => {  
-       try{ const { username, email, password } = req.body;
+    try {
+        const { username, email, password } = req.body;
         const newUser = new User({ email, username });
         const registeredUser = await User.register(newUser, password); 
         req.login(registeredUser, (err) => {
@@ -26,36 +28,32 @@ router.post('/signup', async (req, res, next) => {
     }
 });
 
-// GET login form (correct)
+// GET login form - ✅ CORRECT: No saveReturnTo needed
 router.get('/login', (req, res) => {
     res.render('users/login'); 
 });
 
-// POST login (fixed)
-router.post("/login",
+// POST login - ✅ CORRECT: Fixed redirect logic
+router.post("/login",saveReturnTo,
     passport.authenticate('local', {
-        failureRedirect: "/login", 
-        failureFlash: true 
-    }),
+        failureRedirect: '/login',
+        failureFlash: true
+    }), 
     (req, res) => {
         req.flash("success", "Welcome back to Wanderlust!");
-        res.redirect('/listings');
+        res.redirect(res.locals.returnTo);
     }
 );
 
-
-//  logout 
-router.get("/logout",(req, res, next) =>{
-    req.logout((err)=>{
+// Logout
+router.get("/logout", (req, res, next) => {
+    req.logout((err) => {
         if(err){
-            next(err);
+            return next(err);
         }
-        req.flash("success", "you are loggrd out");
+        req.flash("success", "You are logged out");
         res.redirect('/listings');
-    })
-}) 
+    });
+}); 
     
-  
-
-
 module.exports = router;

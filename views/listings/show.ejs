@@ -5,13 +5,28 @@
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card shadow-sm border-0">
-        <!-- Image -->
-        <% if(listing.image) { %>
-          <img src="<%= listing.image.url || listing.image %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem; object-fit: cover;">
-        <% } else { %>
-          <img src="/images/default-listing.jpg" class="card-img-top" alt="Default listing image" style="height: 20rem; object-fit: cover;">
-        <% } %>
-
+       <% if (listing && listing.image && (listing.image.url || listing.image)) { %>
+  <img 
+    src="<%= listing.image.url || listing.image %>" 
+    class="card-img-top" 
+    alt="<%= listing.title || 'Property listing' %>"
+    style="height: 20rem; object-fit: cover;"
+    loading="lazy"
+    width="400"
+    height="300"
+    onerror="this.onerror=null;this.src='/images/default-listing.jpg'"
+  >
+<% } else { %>
+  <img 
+    src="/images/default-listing.jpg" 
+    class="card-img-top" 
+    alt="Default property image"
+    style="height: 20rem; object-fit: cover;"
+    loading="lazy"
+    width="400"
+    height="300"
+  >
+<% } %>
         <!-- Card Body -->
         <div class="card-body">
           <h3 class="listing-title mb-3"><%= listing.title %></h3>
