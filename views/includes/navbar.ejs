@@ -1,24 +1,40 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+    
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <i class="fa-solid fa-compass" style="color: #fe424d; font-size: 1.5rem;"></i>
+      <span class="ms-2 fw-bold" style="color: #1a1a1a;">Airbase</span>
+    </a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/listings">All Listings</a>
-        <a class="nav-link" href="/listings/new">Add new Listing</a>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="/listings">All Listings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="/listings/new">Add Listing</a>
+        </li>
+      </ul>
+      <!-- Right-aligned Auth Links -->
+      <div class="navbar-nav ms-auto">
+        <% if (user === null || user === undefined) { %>
+          <a class="nav-link" href="/signup">Sign up</a>
+          <a class="nav-link" href="/login">Login</a>
+        <% } else { %>
+          <!-- Optional: Show username or profile icon later -->
+          <a class="nav-link btn btn-outline-danger btn-sm px-3" href="/logout">Logout</a>
+        <% } %>
       </div>
     </div>
-   <!-- In your EJS template -->
-<div class="navbar-nav ms-auto">
- <% if (user === null || user === undefined) { %>
- <a class="nav-link" href="/signup">Sign up</a>
- <a class="nav-link" href="/login">Login</a>  
- <% } else { %>
- <a class="nav-link" href="/logout">Logout</a>
- <% } %>
-</div>
   </div>
 </nav>
