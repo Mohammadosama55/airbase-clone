@@ -1,111 +1,185 @@
-
 <%- layout('layouts/boilerplate') %>
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow-sm border-0">
-       <% if (listing && listing.image && (listing.image.url || listing.image)) { %>
-  <img 
-    src="<%= listing.image.url || listing.image %>" 
-    class="card-img-top" 
-    alt="<%= listing.title || 'Property listing' %>"
-    style="height: 20rem; object-fit: cover;"
-    loading="lazy"
-    width="400"
-    height="300"
-    onerror="this.onerror=null;this.src='/images/default-listing.jpg'"
-  >
-<% } else { %>
-  <img 
-    src="/images/default-listing.jpg" 
-    class="card-img-top" 
-    alt="Default property image"
-    style="height: 20rem; object-fit: cover;"
-    loading="lazy"
-    width="400"
-    height="300"
-  >
-<% } %>
-        <!-- Card Body -->
-        <div class="card-body">
-          <h3 class="listing-title mb-3"><%= listing.title %></h3>
-          <p class="listing-desc mb-4"><%= listing.description %></p>
+    
+    <!-- Main Listing Card -->
+    <div class="col-md-10">
+      <!-- Image Section -->
+      <div class="listing-image-container mb-4">
+        <% if (listing.image && (listing.image.url || listing.image)) { %>
+          <img 
+            src="<%= listing.image.url || listing.image %>" 
+            class="img-fluid rounded-4 shadow-sm" 
+            alt="<%= listing.title %>"
+            style="height: 400px; object-fit: cover; width: 100%;"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='/images/default-listing.jpg';"
+          >
+        <% } else { %>
+          <img 
+            src="/images/default-listing.jpg" 
+            class="img-fluid rounded-4 shadow-sm" 
+            alt="Default listing"
+            style="height: 400px; object-fit: cover; width: 100%;"
+            loading="lazy"
+          >
+        <% } %>
+      </div>
 
-          <ul class="list-unstyled listing-meta">
-            <li><strong>Price:</strong> ₹ <%= listing.price.toLocaleString("en-IN") %></li>
-            <li><strong>Location:</strong> <%= listing.location %></li>
-            <li><strong>Country:</strong> <%= listing.country %></li>
-          </ul>
-        </div>
+      <!-- Listing Info -->
+      <div class="bg-white p-4 rounded-4 shadow-sm border">
+        <h1 class="listing-title mb-3 fs-2"><%= listing.title %></h1>
+        
+        <p class="listing-desc text-muted mb-4 fs-5"><%= listing.description %></p>
 
-        <!-- Card Footer -->
+        <ul class="list-unstyled listing-meta mb-4">
+          <li class="mb-2"><strong>Price:</strong> ₹ <%= listing.price.toLocaleString("en-IN") %> <small class="text-muted">per night</small></li>
+          <li class="mb-2"><strong>Location:</strong> <%= listing.location %>, <%= listing.country %></li>
+        </ul>
+
+        <!-- Action Buttons -->
         <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-          <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">Edit Listing</a>
-
+          <!-- <div lass="d-flex justify-content-between align-items-ccenter mt-4"> -->
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark px-4">Edit Listing</a>
+          
+            
           <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
-            <button type="submit" class="btn btn-danger">Delete Listing</button>
+            <button type="submit" class="btn btn-outline-danger px-4">Delete Listing</button>
+          </form>
+          
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="col-md-10 mt-5">
+      <h2 class="mb-4">Guest Reviews</h2>
+
+      <!-- Add Review Form -->
+      <div class="card mb-5 border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h5>Leave a Review</h5>
+          <form action="/listings/<%= listing._id %>/reviews" method="POST">
+            
+            <!-- Rating Stars -->
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <div class="rating-stars d-flex">
+                <% for(let i = 1; i <= 5; i++) { %>
+                  <input type="radio" id="star<%= i %>" name="review[rating]" value="<%= i %>" required>
+                  <label for="star<%= i %>" class="star">★</label>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="mb-3">
+              <label for="comment" class="form-label">Your Review</label>
+              <textarea 
+                class="form-control" 
+                name="review[comment]" 
+                id="comment" 
+                rows="4" 
+                placeholder="Share your experience..." 
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary px-4">Submit Review</button>
           </form>
         </div>
       </div>
-    </div>
-    
-    <!-- Review Section -->
-    <div class="col-md-8 mt-5">
-      <h4>Leave a Review</h4>
-      <form action="/listings/<%= listing._id %>/reviews" method="POST">
-        <div class="mb-3">
-          <label for="rating" class="form-label">Rating (1-5)</label>
-          <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]" required>
-          <div class="form-text">Slide to select rating</div>
-        </div>
 
-        <div class="mb-3">
-          <label for="comment" class="form-label">Comment</label>
-          <textarea class="form-control" name="review[comment]" id="comment" rows="4" placeholder="Share your experience..." required></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-success">Submit Review</button>
-      </form>
-      
-      <!-- All Reviews Section -->
-      <div class="mt-5">
-        <h4>All Reviews</h4>
-        <% if (listing.reviews && listing.reviews.length > 0) { %>
-          <div class="reviews-container">
-            <% listing.reviews.forEach(review => { %>
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h6 class="card-title">
-                        <% for(let i = 0; i < review.rating; i++) { %>
-                          <span class="text-warning">★</span>
-                        <% } %>
-                        <% for(let i = review.rating; i < 5; i++) { %>
-                          <span class="text-muted">★</span>
-                        <% } %>
-                      </h6>
-                      <p class="card-text"><%= review.comment %></p>
+      <!-- Existing Reviews -->
+      <% if (listing.reviews && listing.reviews.length > 0) { %>
+        <div class="reviews-container">
+          <h5 class="mb-4"><%= listing.reviews.length %> review(s)</h5>
+          <% listing.reviews.forEach(review => { %>
+            <div class="card mb-3 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <!-- Star Rating -->
+                    <div class="text-warning fs-6 mb-2">
+                      <% for(let i = 1; i <= 5; i++) { %>
+                        <span><%= i <= review.rating ? '★' : '☆' %></span>
+                      <% } %>
                     </div>
-                    <div class="d-flex flex-column align-items-end">
-                      <small class="text-muted mb-2">
-                        <%= review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'Recent' %>
-                      </small>
-                      <!-- Delete Review Form -->
-                      <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="d-inline">
-                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                      </form>
-                    </div>
+                    <!-- Comment -->
+                    <p class="mb-1"><%= review.comment %></p>
+                    <!-- Date -->
+                    <small class="text-muted">
+                      Reviewed on <%= new Date(review.createdAt).toLocaleDateString() %>
+                    </small>
                   </div>
+                  <!-- Delete Button -->
+                  <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="ms-3">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                  </form>
                 </div>
               </div>
-            <% }); %>
-          </div>
-        <% } else { %>
-          <p class="text-muted">No reviews yet. Be the first to review!</p>
-        <% } %>
-      </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="text-muted fs-5">No reviews yet. Be the first to share your experience!</p>
+      <% } %>
     </div>
   </div>
 </div>
+
+<!-- Custom Styles -->
+<style>
+  .listing-title {
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+
+  .listing-desc {
+    line-height: 1.6;
+  }
+
+  .rating-stars {
+    font-size: 1.5rem;
+    direction: rtl;
+    gap: 0;
+  }
+
+  .rating-stars input {
+    display: none;
+  }
+
+  .rating-stars label {
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 1.5rem;
+  }
+
+  .rating-stars label:hover,
+  .rating-stars label:hover ~ label,
+  .rating-stars input:checked ~ label {
+    color: #fe424d;
+  }
+
+  .btn-primary {
+    background-color: #fe424d;
+    border: none;
+    font-weight: 500;
+  }
+
+  .btn-primary:hover {
+    background-color: #e63a46;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .d-flex {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .rating-stars {
+      font-size: 1.2rem;
+    }
+  }
+</style>
