@@ -2,7 +2,7 @@
 
 <div class="form-container">
   <h3 class="mb-4 text-center">Create a New Listing</h3>
-  <form method="POST" action="/listings">
+  <form method="POST" action="/listings" enctype="multipart/form-data">
     
     <!-- Title -->
     <div class="mb-3">
@@ -18,8 +18,8 @@
 
     <!-- Image URL -->
     <div class="mb-3">
-      <label for="image" class="form-label">Image URL</label>
-      <input name="listing[image]" type="text" class="form-control" id="image" placeholder="Enter image URL or link" />
+      <label for="image" class="form-label">Upload image</label>
+      <input name="listing[image]" type="file" class="form-control" id="image"  />
     </div>
 
     <!-- Price -->

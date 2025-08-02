@@ -15,13 +15,21 @@
       <label for="description" class="form-label">Description</label>
       <textarea name="listing[description]" class="form-control" id="description" rows="4" required><%= listing.description %></textarea>
     </div>
+     <!-- Current Image -->
+<div class="mb-3">
+  <label class="form-label">Current Image</label>
+  <% if (listing.image) { %>
+    <img src="<%= typeof listing.image === 'object' ? listing.image.url : listing.image %>" 
+         class="img-thumbnail mb-2" style="max-height: 200px;">
+  <% } %>
 
-    <!-- Image URL -->
-    <div class="mb-3">
-      <label for="image" class="form-label">Image URL</label>
-      <input name="listing[image]" type="text" class="form-control" id="image" value="<%= listing.image %>" />
-    </div>
+  <!-- File Input -->
+  <input type="file" name="image" class="form-control" accept="image/*">
 
+  <!-- Hidden field with current image URL -->
+  <input type="hidden" name="listing[imageUrl]" 
+         value="<%= typeof listing.image === 'object' ? listing.image.url : listing.image %>">
+</div>
     <!-- Price -->
     <div class="mb-3">
       <label for="price" class="form-label">Price</label>

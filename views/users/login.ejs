@@ -1,84 +1,53 @@
 <%- layout('layouts/boilerplate') %>
 
-<div class="container">
-  <div class="form-wrapper">
-    <h2>LOGIN</h2>
-    <form action="login" method="POST">
-   <div class="form-group">
-        <label for="username">Username</label>
+<div class="login-container">
+  <div class="login-card">
+    <!-- Logo or Icon -->
+    <div class="login-header text-center mb-4">
+     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #fe424d;">
+  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="#fe424d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9 22V12h6v10" stroke="#fe424d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+      <h2>Welcome back</h2>
+      <p class="text-muted">Sign in to manage your listings</p>
+    </div>
+
+    <!-- Login Form -->
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="username" class="form-label">Username</label>
         <input 
           type="text" 
           id="username" 
           name="username" 
-          required
-          minlength="3"
+          class="form-control" 
+          placeholder="Enter your username" 
+          required 
+          minlength="3" 
           maxlength="20"
         >
       </div>
       
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password" class="form-label">Password</label>
         <input 
           type="password" 
           id="password" 
           name="password" 
-          required
+          class="form-control" 
+          placeholder="Enter your password" 
+          required 
           minlength="6"
         >
       </div>
       
-      <button type="submit">login</button>
+      <button type="submit" class="btn btn-primary w-100">Log In</button>
     </form>
+
+    <!-- Sign Up Link -->
+    <div class="login-footer text-center mt-3">
+      <p>Don’t have an account? <a href="/signup" class="link-primary">Sign up</a></p>
+    </div>
   </div>
 </div>
-<style>
-    .container {
-    max-width: 500px;
-    margin: 2rem auto;
-    padding: 1rem;
-  }
-  .form-wrapper {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 1rem;
-  }
-  button:hover {
-    background-color: #0056b3;
-  }
-  .login-link {
-    text-align: center;
-    margin-top: 1.5rem;
-  }
-  .login-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-</style>
 

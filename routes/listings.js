@@ -4,28 +4,50 @@ const { validateListing } = require('../middleware/validation');
 const wrapAsync = require('../utils/wrapAsync');
 const { isLoggedin, isOwner } = require('../middleware/isLoggedin');
 const listingController = require('../controllers/listings');
-// Index Route
-router.get("/", wrapAsync(listingController.index));
+const multer  = require('multer')
+const {storage} =require('../cloudConfig.js')
+const upload = multer({ storage })
 
-// New Route
-router.get("/new",isLoggedin, (req, res) => {
-    res.render("listings/new.ejs");
-});
+// ======================================
+//          LISTING ROUTES
+// ======================================
 
-// Show Route
-router.get("/:id", wrapAsync(listingController.showListing));
+// Index and Create routes (same path, different methods)
+router.route("/")
+    .get(wrapAsync(listingController.index))          // GET /listings - Show all listings
+    .post(                                           // POST /listings - Create new listing
+        isLoggedin,
 
-// Create Route
-router.post("/", isLoggedin, validateListing, wrapAsync(listingController.createListing));
+            upload.single('listing[image]'),
+        wrapAsync(listingController.createListing)
+    );
+    
+// New Listing Form (special path)
+router.get("/new",                                   // GET /listings/new - New listing form
+    isLoggedin,
+    listingController.renderNewForm
+);
 
+// Routes for individual listings (same :id path)
+router.route("/:id")
+    .get(wrapAsync(listingController.showListing))    // GET /listings/:id - Show listing
+    // .put(                                            // PUT /listings/:id - Update listing
+    //     isLoggedin,
+    //     isOwner,
+    //     wrapAsync(listingController.updateListing)
+    // )
+    .put(isLoggedin, isOwner, upload.single('image'),validateListing,  wrapAsync(listingController.updateListing))  //
+    .delete(                                         // DELETE /listings/:id - Delete listing
+        isLoggedin,
+        isOwner,
+        wrapAsync(listingController.deleteListing)
+    );
 
-// Edit Route
-router.get("/:id/edit", isLoggedin, wrapAsync(listingController.renderEditForm));
-
-// Update Route
-router.put("/:id", isLoggedin, isOwner, wrapAsync(listingController.updateListing));
-
-// Delete Route
-router.delete("/:id", isLoggedin, isOwner, wrapAsync(listingController.deleteListing));
+// Edit Form (special path)
+router.get("/:id/edit",                              // GET /listings/:id/edit - Edit form
+    isLoggedin,
+    isOwner,
+    wrapAsync(listingController.renderEditForm)
+);
 
 module.exports = router;

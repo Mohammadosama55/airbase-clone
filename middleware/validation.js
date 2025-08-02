@@ -6,7 +6,7 @@ const validateListing = (req, res, next) => {
   if (error) {
     const errMsg = error.details.map(el => el.message).join(',');
      console.log(errMsg);
-    return res.status(400).send(`Validation Error: ${errMsg}`);
+    return res.status(400).send(`Validation listing Error: ${errMsg}`);
   }
   next();
 };
@@ -16,7 +16,7 @@ const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
   if (error) {
     const errMsg = error.details.map(el => el.message).join(',');
-    return res.status(400).send(`Validation Error: ${errMsg}`);
+    return res.status(400).send(`Validation reviews Error: ${errMsg}`);
   }
   next();
 };

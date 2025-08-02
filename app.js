@@ -1,3 +1,5 @@
+require('dotenv').config()
+console.log(process.env.SCRETE);
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require("path");
@@ -5,7 +7,7 @@ const methodOverride = require("method-override");
 const engine = require('ejs-mate');
 const listingsRouter = require('./routes/listings');
 const reviewsRouter = require('./routes/reviews');
-const userRouter = require('./routes/user');
+const userRouter = require('./routes/users');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 const session = require('express-session');
 const flash = require('connect-flash');

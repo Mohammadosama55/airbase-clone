@@ -4,11 +4,8 @@ const listingSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
   image: {
-    filename: String,
-    url: {
-      type: String,
-      default: "https://images.unsplash.com/photo-1625505826533-5c80aca7d157?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJlYWNoJTIwdmFjYXRpb258ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
-    }
+    url:String,
+    filename:String,
   },
   price: Number,
   location: String,
@@ -18,7 +15,11 @@ const listingSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Review'
     }
-  ]
+  ],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId, // This specifies it's a MongoDB ObjectId
+    ref: 'User', // This tells Mongoose that this ObjectId refers to documents in the 'User' collection
+  },
 });
 
 // Use a function to lazily load the Review model
